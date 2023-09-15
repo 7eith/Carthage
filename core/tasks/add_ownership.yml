@@ -1,0 +1,17 @@
+---
+- name: Add required permissions to data and docker_apps directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    recurse: true
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0755"
+  loop:
+    - "{{ data_dir }}"
+    - "{{ docker_dir }}/socket-proxy"
+    - "{{ docker_dir }}/traefik-proxy"
+    - "{{ docker_dir }}/portainer"
+    - "{{ docker_dir }}/jellyfin"
+    - "{{ docker_dir }}/jellyfin/config"
+    - "{{ docker_dir }}/qbittorrent"

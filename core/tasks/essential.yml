@@ -1,0 +1,49 @@
+---
+- name: Install packages
+  ansible.builtin.package:
+    name: "{{ packages }}"
+    state: present
+
+- name: Install pip packages
+  ansible.builtin.pip:
+    name: "{{ pip_packages }}"
+    state: present
+
+- name: Create Docker directory
+  ansible.builtin.file:
+    path: "{{ docker_dir }}"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0755"
+
+- name: Create data directory
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0755"
+  loop:
+    - "{{ data_dir }}"
+    - "{{ data_dir }}/torrents"
+    - "{{ data_dir }}/media"
+    - "{{ data_dir }}/media/movies"
+    - "{{ data_dir }}/media/tv"
+    - "{{ data_dir }}/torrents/movies"
+    - "{{ data_dir }}/torrents/tv"
+
+- name: Create Apps directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0755"
+  loop:
+    - "{{ docker_dir }}/socket-proxy"
+    - "{{ docker_dir }}/traefik-proxy"
+    - "{{ docker_dir }}/portainer"
+    - "{{ docker_dir }}/jellyfin"
+    - "{{ docker_dir }}/jellyfin/config"
+    - "{{ docker_dir }}/qbittorrent"

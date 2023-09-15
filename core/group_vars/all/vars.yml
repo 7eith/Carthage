@@ -1,0 +1,45 @@
+---
+username: carthage
+
+docker_dir: /home/carthage
+data_dir: /home/carthage
+
+puid: "1000"
+
+pgid: "1000"
+
+timezone: "Europe/Paris"
+
+domain: "synezia.com"
+
+cloudflare_email: ""
+
+cloudflare_api_key: ""
+
+traefik_basic_auth_hash: ""
+
+packages:
+  - unzip
+  - wget
+  - curl
+  - git
+  - python3
+  - python3-pip
+
+pip_packages:
+  - ansible
+  - github3.py
+  - docker
+  - docker-compose
+
+docker_dependencies:
+  - ca-certificates
+  - gnupg
+  - curl
+
+docker_packages:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
+  - docker-buildx-plugin
+  - docker-compose-plugin
