@@ -13,5 +13,4 @@
     - "{{ docker_dir }}/traefik-proxy"
     - "{{ docker_dir }}/portainer"
     - "{{ docker_dir }}/jellyfin"
-    - "{{ docker_dir }}/jellyfin/config"
     - "{{ docker_dir }}/qbittorrent"
