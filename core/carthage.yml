@@ -18,7 +18,10 @@
         - portainer
         - jellyfin
         - qbittorrent
+        - homarr
         - prowlarr
+        - radarr
+        - sonarr
         # - authelia
         # - traefik
         # - code_server

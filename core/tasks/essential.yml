@@ -46,4 +46,7 @@
     - "{{ docker_dir }}/portainer"
     - "{{ docker_dir }}/jellyfin"
     - "{{ docker_dir }}/qbittorrent"
+    - "{{ docker_dir }}/homarr"
     - "{{ docker_dir }}/prowlarr"
+    - "{{ docker_dir }}/radarr"
+    - "{{ docker_dir }}/sonarr"
