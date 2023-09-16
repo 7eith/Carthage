@@ -9,6 +9,10 @@
     docker_arch: arm64
   when: ansible_architecture == "aarch64"
 
+- name: Set RedHat distribution
+  ansible.builtin.set_fact:
+    rh_distribution: "{{ 'rhel' if ansible_distribution == 'RedHat' else ansible_distribution | lower }}"
+
 - name: Install Docker dependencies
   ansible.builtin.package:
     name: "{{ docker_dependencies }}"
@@ -19,6 +23,28 @@
     url: https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg
     state: present
   when: ansible_distribution in ["Ubuntu", "Debian"]
+
+- name: Add Docker repository for apt
+  ansible.builtin.apt_repository:
+    repo: deb [arch={{ docker_arch }}] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable
+    state: present
+  when: ansible_distribution in ["Ubuntu", "Debian"]
+
+- name: Add signing key for yum
+  ansible.builtin.rpm_key:
+    key: "https://download.docker.com/linux/{{ rh_distribution }}/gpg"
+    state: present
+  when: ansible_distribution in ["Fedora", "CentOS", "RedHat"]
+
+- name: Add repository into repo.d list for yum
+  ansible.builtin.yum_repository:
+    name: docker
+    description: docker repository
+    baseurl: "https://download.docker.com/linux/{{ rh_distribution }}/$releasever/$basearch/stable"
+    enabled: true
+    gpgcheck: true
+    gpgkey: "https://download.docker.com/linux/{{ rh_distribution }}/gpg"
+  when: ansible_distribution in ["Fedora", "CentOS", "RedHat"]
 
 - name: Install docker
   ansible.builtin.package:
