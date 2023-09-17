@@ -20,3 +20,4 @@
     - "{{ docker_dir }}/sonarr"
     - "{{ docker_dir }}/uptime_kuma"
     - "{{ docker_dir }}/jellyseerr"
+    - "{{ docker_dir }}/dashdot"

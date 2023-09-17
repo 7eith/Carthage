@@ -24,6 +24,7 @@
         - sonarr
         - uptime_kuma
         - jellyseerr
+        - dashdot
         # - authelia
         # - traefik
         # - code_server
