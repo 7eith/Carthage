@@ -23,6 +23,7 @@
         - radarr
         - sonarr
         - uptime_kuma
+        - jellyseerr
         # - authelia
         # - traefik
         # - code_server

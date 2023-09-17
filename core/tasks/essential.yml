@@ -51,3 +51,4 @@
     - "{{ docker_dir }}/radarr"
     - "{{ docker_dir }}/sonarr"
     - "{{ docker_dir }}/uptime_kuma"
+    - "{{ docker_dir }}/jellyseerr"
