@@ -23,4 +23,4 @@
     - "{{ docker_dir }}/dashdot"
     - "{{ docker_dir }}/mariadb"
     - "{{ docker_dir }}/phpmyadmin"
-
+    - "{{ docker_dir }}/speedtest-tracker"

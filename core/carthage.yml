@@ -10,6 +10,12 @@
     - name: Install docker
       ansible.builtin.include_tasks: tasks/docker.yml
 
+    - name: Install Essentials
+      ansible.builtin.include_tasks: "tasks/essentials/{{ item }}"
+      loop:
+        - database/mariadb.yml
+        - database/phpmyadmin.yml
+
     - name: Install Docker Apps
       ansible.builtin.include_tasks: "tasks/{{ item }}.yml"
       loop:
@@ -25,6 +31,7 @@
         - uptime_kuma
         - jellyseerr
         - dashdot
+        - speedtest_tracker
         # - authelia
         # - traefik
         # - code_server
@@ -51,12 +58,6 @@
         # - vaultwarden
         # - watchtower
         # - wireguard
-
-    - name: Install Essentials
-      ansible.builtin.include_tasks: "tasks/essentials/{{ item }}"
-      loop:
-        - database/mariadb.yml
-        - database/phpmyadmin.yml
 
     - name: Modify ownership of data and docker_apps directories
       ansible.builtin.include_tasks: tasks/add_ownership.yml

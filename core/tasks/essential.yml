@@ -56,3 +56,4 @@
     - "{{ docker_dir }}/mariadb"
     - "{{ docker_dir }}/phpmyadmin"
     - "{{ docker_dir }}/phpmyadmin/themes"
+    - "{{ docker_dir }}/speedtest-tracker"

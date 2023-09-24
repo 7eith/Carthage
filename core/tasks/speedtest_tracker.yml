@@ -1,0 +1,39 @@
+---
+- name: Create SpeedTest Tracker container
+  community.docker.docker_container:
+    name: speedtest-tracker
+    image: ghcr.io/alexjustesen/speedtest-tracker:latest
+    restart_policy: unless-stopped
+    state: started
+    networks:
+      - name: carthage
+      - name: mariadb
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "{{ docker_dir }}/speedtest-tracker/config:/config"
+    env:
+      PUID: "{{ puid }}"
+      PGID: "{{ pgid }}"
+      TZ: "{{ timezone }}"
+      DB_CONNECTION: "mysql"
+      DB_HOST: "mariadb"
+      DB_PORT: "3306"
+      DB_DATABASE: "metrics_speedtests"
+      DB_USERNAME: "{{ mariadb_username }}"
+      DB_PASSWORD: "{{ mariadb_password }}"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.speedtest.entrypoints: "http"
+      traefik.http.routers.speedtest.rule: "Host(`metrics.{{ domain }}`)"
+      traefik.http.middlewares.speedtest-https-redirect.redirectscheme.scheme: "https"
+      # traefik.http.middlewares.speedtest-stripprefix.stripprefix.prefixes: "/network"
+
+      traefik.http.routers.speedtest.middlewares: "speedtest-https-redirect"
+      # traefik.http.routers.speedtest-secure.middlewares: "speedtest-stripprefix"
+      traefik.http.routers.speedtest-secure.entrypoints: "https"
+      traefik.http.routers.speedtest-secure.rule: "Host(`metrics.{{ domain }}`)"
+      traefik.http.routers.speedtest-secure.tls: "true"
+      traefik.http.routers.speedtest-secure.service: "speedtest"
+      # traefik.http.routers.qbit-secure.middlewares: "authelia@docker"
+      traefik.http.services.speedtest.loadbalancer.server.port: "80"
+      traefik.docker.network: "carthage"
