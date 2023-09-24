@@ -1,4 +1,4 @@
----
+--- 
 - name: Setup PhpMyAdmin Theme, Dark Wolf
   ansible.builtin.unarchive:
     src: "https://files.phpmyadmin.net/themes/darkwolf/5.2/darkwolf-5.2.zip"
