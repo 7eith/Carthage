@@ -2,7 +2,7 @@
 - name: Setup PhpMyAdmin Theme, Dark Wolf
   ansible.builtin.unarchive:
     src: "https://files.phpmyadmin.net/themes/darkwolf/5.2/darkwolf-5.2.zip"
-    dest: "{{ docker_dir }}/phpmyadmin"
+    dest: "{{ docker_dir }}/phpmyadmin/themes"
     creates: "{{ docker_dir }}/phpmyadmin/themes/darkwolf"
     remote_src: true
     owner: "{{ username }}"
@@ -12,7 +12,7 @@
 - name: Setup PhpMyAdmin
   community.docker.docker_container:
     name: phpmyadmin
-    image: phpmyadmin:latest
+    image: lscr.io/linuxserver/phpmyadmin:latest
     restart_policy: always
     state: started
     networks:
@@ -22,8 +22,8 @@
       PUID: "{{ puid }}"
       PGID: "{{ pgid }}"
       TZ: "{{ timezone }}"
-      PMA_ARBITRARY: "1"
       PMA_ABSOLUTE_URI: "https://devtools.{{ domain }}/phpmyadmin"
+      PMA_HOST: mariadb
     labels:
       traefik.enable: "true"
       traefik.http.routers.phpmyadmin.entrypoints: "http"
