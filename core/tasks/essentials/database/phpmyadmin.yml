@@ -1,5 +1,5 @@
 ---
-- name: [Essentials @ Database] Setup PhpMyAdmin Theme, Dark Wolf
+- name: Setup PhpMyAdmin Theme, Dark Wolf
   ansible.builtin.unarchive:
     src: "https://files.phpmyadmin.net/themes/darkwolf/5.2/darkwolf-5.2.zip"
     dest: "{{ docker_dir }}/phpmyadmin"
@@ -9,7 +9,7 @@
     group: "{{ username }}"
     mode: "0755"
   
-- name: [Essentials @ Database] Setup PhpMyAdmin
+- name: Setup PhpMyAdmin
   community.docker.docker_container:
     name: phpmyadmin
     image: phpmyadmin:latest
