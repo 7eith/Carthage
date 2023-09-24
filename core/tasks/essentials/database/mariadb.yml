@@ -8,15 +8,18 @@
 - name: Setup Maria DB
   community.docker.docker_container:
     name: mariadb
-    image: mariadb:10
+    image: lscr.io/linuxserver/mariadb:latest
     restart_policy: always
     state: started
+    env:
+      PUID: "{{ puid }}"
+      PGID: "{{ pgid }}"
+      TZ: "{{ timezone }}"
+      MYSQL_USER: "{{ mariadb_username }}"
+      MYSQL_PASSWORD: "{{ mariadb_password }}"
+      MYSQL_ROOT_PASSWORD: "{{ mariadb_root_password }}"
+      MYSQL_DATABASE: "carthage"
     networks:
       - name: mariadb
     volumes:
-      - "{{ docker_dir }}/mariadb:/var/lib/mysql"
-    env:
-      MARIADB_USER: "{{ mariadb_username }}"
-      MARIADB_PASSWORD: "{{ mariadb_password }}"
-      MARIADB_ROOT_PASSWORD: "{{ mariadb_root_password }}"
-      MARIADB_DATABASE: "carthage"
+      - "{{ docker_dir }}/mariadb:/config"

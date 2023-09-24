@@ -18,23 +18,25 @@
     networks:
       - name: carthage
       - name: mariadb
-    volumes:
-      - "{{ docker_dir }}/phpmyadmin/themes:/var/www/html/themes"
     env:
-      DB_HOST: "mariadb"
-      MYSQL_ROOT_PASSWORD: "{{ mariadb_root_password }}"
-      PMA_ABSOLUTE_URI: "https://devtools.{{ domain }}/phpmyadmin/"
+      PUID: "{{ puid }}"
+      PGID: "{{ pgid }}"
+      TZ: "{{ timezone }}"
+      PMA_ARBITRARY: "1"
+      PMA_ABSOLUTE_URI: "https://devtools.{{ domain }}/phpmyadmin"
     labels:
       traefik.enable: "true"
       traefik.http.routers.phpmyadmin.entrypoints: "http"
       traefik.http.routers.phpmyadmin.rule: "Host(`devtools.{{ domain }}`) && PathPrefix(`/phpmyadmin`)"
       traefik.http.middlewares.phpmyadmin-https-redirect.redirectscheme.scheme: "https"
       traefik.http.middlewares.phpmyadmin-stripprefix.stripprefix.prefixes: "/phpmyadmin"
-      traefik.http.routers.phpmyadmin.middlewares: "phpmyadmin-https-redirect, pma-stripprefix"
+      traefik.http.routers.phpmyadmin.middlewares: "phpmyadmin-https-redirect"
       traefik.http.routers.phpmyadmin-secure.entrypoints: "https"
       traefik.http.routers.phpmyadmin-secure.rule: "Host(`devtools.{{ domain }}`) && PathPrefix(`/phpmyadmin`)"
       traefik.http.routers.phpmyadmin-secure.tls: "true"
       traefik.http.routers.phpmyadmin-secure.service: "phpmyadmin"
-      # traefik.http.routers.jellyfin-secure.middlewares: "authelia@docker"
+      traefik.http.routers.phpmyadmin-secure.middlewares: "phpmyadmin-stripprefix"
       traefik.http.services.phpmyadmin.loadbalancer.server.port: "80"
       traefik.docker.network: "carthage"
+    volumes:
+      - "{{ docker_dir }}/phpmyadmin:/config"
