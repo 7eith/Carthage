@@ -1,0 +1,22 @@
+---
+- name: [Essentials @ Database] Setup Docker Network for MariaDB
+  community.docker.docker_network:
+    name: mariadb
+    state: present
+    driver: bridge
+
+- name: [Essentials @ Database] Setup Maria DB
+  community.docker.docker_container:
+    name: mariadb
+    image: mariadb:10
+    restart_policy: always
+    state: started
+    networks:
+      - name: mariadb
+    volumes:
+      - "{{ docker_dir }}/mariadb:/var/lib/mysql"
+    env:
+      MARIADB_USER: "{{ mariadb_username }}"
+      MARIADB_PASSWORD: "{{ mariadb_password }}"
+      MARIADB_ROOT_PASSWORD: "{{ mariadb_root_password }}"
+      MARIADB_DATABASE: "carthage"

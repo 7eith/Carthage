@@ -53,3 +53,5 @@
     - "{{ docker_dir }}/uptime_kuma"
     - "{{ docker_dir }}/jellyseerr"
     - "{{ docker_dir }}/dashdot"
+    - "{{ docker_dir }}/mariadb"
+    - "{{ docker_dir }}/phpmyadmin"

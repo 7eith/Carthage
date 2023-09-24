@@ -52,6 +52,12 @@
         # - watchtower
         # - wireguard
 
+    - name: Install Essentials
+      ansible.builtin.include_tasks: "tasks/essentials/{{ item }}"
+      loop:
+        - database/mariadb.yml
+        - database/phpmyadmin.yml
+
     - name: Modify ownership of data and docker_apps directories
       ansible.builtin.include_tasks: tasks/add_ownership.yml
 
