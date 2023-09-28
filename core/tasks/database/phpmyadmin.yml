@@ -1,14 +1,4 @@
 --- 
-- name: Setup PhpMyAdmin Theme, Dark Wolf
-  ansible.builtin.unarchive:
-    src: "https://files.phpmyadmin.net/themes/darkwolf/5.2/darkwolf-5.2.zip"
-    dest: "{{ docker_dir }}/phpmyadmin/themes"
-    creates: "{{ docker_dir }}/phpmyadmin/themes/darkwolf"
-    remote_src: true
-    owner: "{{ username }}"
-    group: "{{ username }}"
-    mode: "0755"
-  
 - name: Setup PhpMyAdmin
   community.docker.docker_container:
     name: phpmyadmin
@@ -17,7 +7,7 @@
     state: started
     networks:
       - name: carthage
-      - name: mariadb
+      - name: database
     env:
       PUID: "{{ puid }}"
       PGID: "{{ pgid }}"
@@ -40,3 +30,14 @@
       traefik.docker.network: "carthage"
     volumes:
       - "{{ docker_dir }}/phpmyadmin:/config"
+
+- name: Setup PhpMyAdmin Theme, Dark Wolf
+  ansible.builtin.unarchive:
+    src: "https://files.phpmyadmin.net/themes/darkwolf/5.2/darkwolf-5.2.zip"
+    dest: "{{ docker_dir }}/phpmyadmin/themes"
+    creates: "{{ docker_dir }}/phpmyadmin/themes/darkwolf"
+    remote_src: true
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0755"
+  

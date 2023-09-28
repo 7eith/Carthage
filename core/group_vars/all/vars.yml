@@ -18,6 +18,10 @@ cloudflare_api_key: ""
 
 traefik_basic_auth_hash: ""
 
+mariadb_username: ""
+mariadb_password: ""
+mariadb_root_password: ""
+
 packages:
   - unzip
   - wget

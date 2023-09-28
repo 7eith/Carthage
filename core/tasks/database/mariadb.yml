@@ -1,7 +1,7 @@
 ---
 - name: Setup docker host
   community.docker.docker_network:
-    name: mariadb
+    name: database
     state: present
     driver: bridge
 
@@ -20,6 +20,6 @@
       MYSQL_ROOT_PASSWORD: "{{ mariadb_root_password }}"
       MYSQL_DATABASE: "carthage"
     networks:
-      - name: mariadb
+      - name: database
     volumes:
       - "{{ docker_dir }}/mariadb:/config"
