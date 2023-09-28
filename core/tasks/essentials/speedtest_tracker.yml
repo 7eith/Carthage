@@ -7,7 +7,7 @@
     state: started
     networks:
       - name: carthage
-      - name: mariadb
+      - name: database
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "{{ docker_dir }}/speedtest-tracker/config:/config"
