@@ -1,0 +1,20 @@
+---
+http:
+  routers:
+    proxmox:
+      rule: Host(`proxmox.pve`)
+      service: proxmox
+      tls: {}
+      middlewares:
+        - https-redirect
+
+  services:
+    proxmox:
+      loadBalancer:
+        servers:
+          - url: https://192.168.1.42:8006
+
+  middlewares:
+    https-redirect:
+      redirectScheme:
+        scheme: https

@@ -1,0 +1,12 @@
+---
+- name: Upgrade dependencies
+  ansible.builtin.apt:
+    update_cache: true
+    upgrade: full
+  tags: always
+
+# - name: Set Authorized Key
+#   ansible.posix.authorized_key:
+#     user: root
+#     key: "ssh-ed25519 "
+#     state: present

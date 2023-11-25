@@ -1,0 +1,5 @@
+---
+- hosts: traefik
+  roles:
+    - { role: core, tags: all }
+    - { role: traefik, tags: traefik }
