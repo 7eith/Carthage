@@ -2,11 +2,11 @@ variable "proxmox_url" {
     type = string
 }
 
-variable "pm_api_token_id" {
+variable "proxmox_user" {
     type = string
 }
 
-variable "pm_api_token_secret" {
+variable "proxmox_password" {
     type = string
 }
 
