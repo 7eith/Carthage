@@ -16,11 +16,13 @@
       - "6881:6881/udp"
     volumes:
       - "{{ apps_dir }}/qbittorrent/config:/config"
-      - "{{ media_dir }}/torrents:/downloads"
+      - "{{ media_dir }}/torrents:/data/torrents"
     networks:
       - name: web
     env:
       TZ: "{{ timezone }}"
+      PUID: "{{ puid }}"
+      PGID: "{{ pgid }}"
     labels:
       traefik.enable: "true"
       traefik.http.routers.qbit.entrypoints: "http"

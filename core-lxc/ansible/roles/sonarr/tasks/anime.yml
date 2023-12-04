@@ -8,6 +8,8 @@
     restart_policy: unless-stopped
     env:
       TZ: "{{ timezone }}"
+      PUID: "{{ puid }}"
+      PGID: "{{ pgid }}"
       DOCKER_MODS: ghcr.io/gilbn/theme.park:sonarr
     volumes:
       - "{{ apps_dir }}/sonarr-anime/config:/config"
