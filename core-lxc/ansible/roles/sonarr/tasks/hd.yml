@@ -1,0 +1,29 @@
+---
+- name: Install Sonarr 
+  community.docker.docker_container:
+    name: sonarr-hd
+    image: lscr.io/linuxserver/sonarr
+    pull: true
+    state: started
+    restart_policy: unless-stopped
+    env:
+      TZ: "{{ timezone }}"
+      DOCKER_MODS: ghcr.io/gilbn/theme.park:sonarr
+    volumes:
+      - "{{ apps_dir }}/sonarr-hd/config:/config"
+      - "{{ media_dir }}:/data"
+    networks:
+      - name: web
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.sonarr-hd.entrypoints: "http"
+      traefik.http.routers.sonarr-hd.rule: "Host(`hd.sonarr.{{ domain }}`)"
+      traefik.http.middlewares.sonarr-hd-https-redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.sonarr-hd.middlewares: "sonarr-hd-https-redirect"
+      traefik.http.routers.sonarr-hd-secure.entrypoints: "https"
+      traefik.http.routers.sonarr-hd-secure.rule: "Host(`hd.sonarr.{{ domain }}`)"
+      traefik.http.routers.sonarr-hd-secure.tls: "true"
+      traefik.http.routers.sonarr-hd-secure.tls.certresolver: "cloudflare"
+      traefik.http.routers.sonarr-hd-secure.service: "sonarr-hd"
+      traefik.http.services.sonarr-hd.loadbalancer.server.port: "8989"
+      traefik.docker.network: "web"

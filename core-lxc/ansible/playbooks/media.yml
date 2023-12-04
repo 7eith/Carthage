@@ -5,3 +5,4 @@
     - { role: docker, tags: all }
     - { role: qbittorrent, tags: all }
     - { role: radarr, tags: all }
+    - { role: sonarr, tags: all }

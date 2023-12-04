@@ -1,0 +1,33 @@
+---
+- name: Create Media stack directory
+  ansible.builtin.file:
+    state: directory
+    path: "{{ media_dir }}"
+    owner: "1000"
+    group: "1000"
+    mode: 0770
+
+- name: Create Media stack subdirectories
+  ansible.builtin.file:
+    state: directory
+    path: "{{ media_dir }}/{{ item }}"
+    owner: "1000"
+    group: "1000"
+    mode: 0770
+  loop:
+    - torrents
+    - torrents/shows/hd
+    - torrents/shows/4k
+    - torrents/shows/anime
+    - media
+    - media/shows
+    - media/anime
+
+- name: Install Sonarr HD
+  ansible.builtin.include_tasks: hd.yml
+
+- name: Install Sonarr Anime
+  ansible.builtin.include_tasks: anime.yml
+  
+- name: Install Sonarr 4K
+  ansible.builtin.include_tasks: 4k.yml

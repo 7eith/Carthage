@@ -1,0 +1,29 @@
+---
+- name: Install Sonarr 
+  community.docker.docker_container:
+    name: sonarr-anime
+    image: lscr.io/linuxserver/sonarr
+    pull: true
+    state: started
+    restart_policy: unless-stopped
+    env:
+      TZ: "{{ timezone }}"
+      DOCKER_MODS: ghcr.io/gilbn/theme.park:sonarr
+    volumes:
+      - "{{ apps_dir }}/sonarr-anime/config:/config"
+      - "{{ media_dir }}:/data"
+    networks:
+      - name: web
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.sonarr-anime.entrypoints: "http"
+      traefik.http.routers.sonarr-anime.rule: "Host(`anime.sonarr.{{ domain }}`)"
+      traefik.http.middlewares.sonarr-anime-https-redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.sonarr-anime.middlewares: "sonarr-anime-https-redirect"
+      traefik.http.routers.sonarr-anime-secure.entrypoints: "https"
+      traefik.http.routers.sonarr-anime-secure.rule: "Host(`anime.sonarr.{{ domain }}`)"
+      traefik.http.routers.sonarr-anime-secure.tls: "true"
+      traefik.http.routers.sonarr-anime-secure.tls.certresolver: "cloudflare"
+      traefik.http.routers.sonarr-anime-secure.service: "sonarr-anime"
+      traefik.http.services.sonarr-anime.loadbalancer.server.port: "8989"
+      traefik.docker.network: "web"
