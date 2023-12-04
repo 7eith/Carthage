@@ -2,4 +2,5 @@
 - hosts: traefik
   roles:
     - { role: core, tags: all }
+    - { role: docker, tags: all }
     - { role: traefik, tags: traefik }

@@ -1,0 +1,29 @@
+---
+- name: Install Radarr 
+  community.docker.docker_container:
+    name: radarr-hd
+    image: lscr.io/linuxserver/radarr
+    pull: true
+    state: started
+    restart_policy: unless-stopped
+    env:
+      TZ: "{{ timezone }}"
+      DOCKER_MODS: ghcr.io/gilbn/theme.park:radarr
+    volumes:
+      - "{{ apps_dir }}/radarr-hd/config:/config"
+      - "{{ media_dir }}:/data"
+    networks:
+      - name: web
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.radarr-hd.entrypoints: "http"
+      traefik.http.routers.radarr-hd.rule: "Host(`radarr-hd.{{ domain }}`)"
+      traefik.http.middlewares.radarr-hd-https-redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.radarr-hd.middlewares: "radarr-hd-https-redirect"
+      traefik.http.routers.radarr-hd-secure.entrypoints: "https"
+      traefik.http.routers.radarr-hd-secure.rule: "Host(`radarr-hd.{{ domain }}`)"
+      traefik.http.routers.radarr-hd-secure.tls: "true"
+      traefik.http.routers.radarr-hd-secure.tls.certresolver: "cloudflare"
+      traefik.http.routers.radarr-hd-secure.service: "radarr-hd"
+      traefik.http.services.radarr-hd.loadbalancer.server.port: "7878"
+      traefik.docker.network: "web"

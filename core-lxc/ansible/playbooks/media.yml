@@ -1,0 +1,7 @@
+---
+- hosts: media
+  roles:
+    - { role: core, tags: all }
+    - { role: docker, tags: all }
+    - { role: qbittorrent, tags: all }
+    - { role: radarr, tags: all }

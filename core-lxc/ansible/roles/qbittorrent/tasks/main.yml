@@ -1,0 +1,36 @@
+---
+- name: Create qBitTorrent directories
+  ansible.builtin.file:
+    path: "{{ apps_dir }}/qbittorrent"
+    state: directory
+    mode: 0755
+
+- name: Install qBitTorrent App
+  community.docker.docker_container:
+    name: qbittorrent
+    image: lscr.io/linuxserver/qbittorrent:4.6.0
+    restart_policy: unless-stopped
+    state: started
+    ports:
+      - "6881:6881"
+      - "6881:6881/udp"
+    volumes:
+      - "{{ apps_dir }}/qbittorrent/config:/config"
+      - "{{ media_dir }}/torrents:/downloads"
+    networks:
+      - name: web
+    env:
+      TZ: "{{ timezone }}"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.qbit.entrypoints: "http"
+      traefik.http.routers.qbit.rule: "Host(`qbit.{{ domain }}`)"
+      traefik.http.middlewares.qbit-https-redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.qbit.middlewares: "qbit-https-redirect"
+      traefik.http.routers.qbit-secure.entrypoints: "https"
+      traefik.http.routers.qbit-secure.rule: "Host(`qbit.{{ domain }}`)"
+      traefik.http.routers.qbit-secure.tls: "true"
+      traefik.http.routers.qbit-secure.tls.certresolver: "cloudflare"
+      traefik.http.routers.qbit-secure.service: "qbit"
+      traefik.http.services.qbit.loadbalancer.server.port: "8080"
+      traefik.docker.network: "web"
