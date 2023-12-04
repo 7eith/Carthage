@@ -1,0 +1,13 @@
+---
+http:
+  routers:
+    proxmox:
+      rule: Host(`proxmox.pve`)
+      service: proxmox
+      tls: {}
+      
+  services:
+    proxmox:
+      loadBalancer:
+        servers:
+          - url: https://192.168.1.42:8006

@@ -1,0 +1,8 @@
+---
+http:
+  routers:
+    dashboard-secure:
+      rule: Host(`traefik.{{ domain }}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
+      service: api@internal
+      tls:
+        certResolver: cloudflare

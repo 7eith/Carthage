@@ -1,53 +1,56 @@
 ---
-- name: Install Traefik
-  ansible.builtin.unarchive:
-    src: https://github.com/traefik/traefik/releases/download/v2.10.5/traefik_v2.10.5_linux_amd64.tar.gz
-    dest: /usr/local/bin
-    remote_src: true
-  notify:
-    - Restart Traefik
+- name: Create Traefik configuration directories
+  ansible.builtin.file:
+    path: "{{ apps_dir }}/traefik/config/services"
+    state: directory
+    mode: 0755
 
-- name: Create Traefik group
-  ansible.builtin.group:
-    name: traefik
-    state: present
-
-- name: Create Traefik user
-  ansible.builtin.user:
-    name: traefik
-    group: traefik
-    shell: /sbin/nologin
-    state: present
-    create_home: false
-
-- name: Set port binding capability on Traefik
-  community.general.capabilities:
-    path: /usr/local/bin/traefik
-    capability: cap_net_bind_service+ep
-    state: present
-
-- name: Copy Traefik config
-  ansible.builtin.copy:
-    src: traefik
-    dest: /etc
-    mode: "0755"
-  notify:
-    - Restart Traefik
-
-- name: Create Traefik config file
+- name: Import Traefik main configuration
   ansible.builtin.template:
     src: traefik.yml.j2
-    dest: /etc/traefik/traefik.yml
-    mode: "0644"
-  notify:
-    - Restart Traefik
+    dest: "{{ apps_dir }}/traefik/config/traefik.yml"
+    mode: 0644
 
-- name: Copy systemd service file to server
-  ansible.builtin.copy:
-    src: traefik.service
-    dest: /etc/systemd/system
-    owner: root
-    group: root
-    mode: "0644"
-  notify:
-    - Start Traefik
+- name: Import Traefik services configuration
+  template:
+    src: "{{ item }}"
+    dest: "{{ apps_dir }}/traefik/config/services/{{ item | basename | regex_replace('\\.j2','') }}"
+    mode: 0644
+  with_fileglob:
+    - ../templates/services/*.j2
+
+- name: Create acme.json file
+  ansible.builtin.file:
+    path: "{{ apps_dir }}/traefik/config/acme.json"
+    state: touch
+    mode: 0600
+    access_time: preserve
+    modification_time: preserve
+
+- name: Create Traefik Docker Network
+  community.docker.docker_network:
+    name: web
+    state: present
+    driver: bridge
+
+- name: Deploy Traefik
+  community.docker.docker_container:
+    name: traefik
+    image: traefik:2.10
+    restart_policy: unless-stopped
+    state: started
+    networks:
+      - name: web
+    security_opts:
+      - no-new-privileges:true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "{{ apps_dir }}/traefik/config/traefik.yml:/traefik.yml:ro"
+      - "{{ apps_dir }}/traefik/config/services:/services:ro"
+      - "{{ apps_dir }}/traefik/config/acme.json:/acme.json"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    env:
+      CF_API_EMAIL: "{{ cloudflare_email }}"
+      CF_API_KEY: "{{ cf_api_key }}"
