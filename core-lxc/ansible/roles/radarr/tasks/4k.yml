@@ -17,11 +17,11 @@
     labels:
       traefik.enable: "true"
       traefik.http.routers.radarr-4k.entrypoints: "http"
-      traefik.http.routers.radarr-4k.rule: "Host(`radarr-4k.{{ domain }}`)"
+      traefik.http.routers.radarr-4k.rule: "Host(`4k.radarr.{{ domain }}`)"
       traefik.http.middlewares.radarr-4k-https-redirect.redirectscheme.scheme: "https"
       traefik.http.routers.radarr-4k.middlewares: "radarr-4k-https-redirect"
       traefik.http.routers.radarr-4k-secure.entrypoints: "https"
-      traefik.http.routers.radarr-4k-secure.rule: "Host(`radarr-4k.{{ domain }}`)"
+      traefik.http.routers.radarr-4k-secure.rule: "Host(`4k.radarr.{{ domain }}`)"
       traefik.http.routers.radarr-4k-secure.tls: "true"
       traefik.http.routers.radarr-4k-secure.tls.certresolver: "cloudflare"
       traefik.http.routers.radarr-4k-secure.service: "radarr-4k"
