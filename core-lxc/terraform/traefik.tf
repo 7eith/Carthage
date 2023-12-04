@@ -13,10 +13,16 @@ resource "proxmox_lxc" "traefik" {
     start           = true
     onboot          = true
 
+    # LXC Enable Docker
+    features {
+        keyctl  = true
+        nesting = true
+    }
+
     # Terraform fix
     rootfs {
         storage     = "local"
-        size        = "4G"
+        size        = "20G"
     }
 
     # Network Settings
