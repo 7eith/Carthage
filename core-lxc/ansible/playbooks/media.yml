@@ -2,7 +2,9 @@
 - hosts: media
   roles:
     - { role: core, tags: all }
-    - { role: docker, tags: all }
+    # - { role: docker, tags: all }
     - { role: qbittorrent, tags: all }
     - { role: radarr, tags: all }
     - { role: sonarr, tags: all }
+    - { role: prowlarr, tags: all }
+    - { role: jellyfin, tags: all }

@@ -1,0 +1,30 @@
+---
+- name: Install Jellyfin 
+  community.docker.docker_container:
+    name: jellyfin
+    image: lscr.io/linuxserver/jellyfin
+    pull: true
+    state: started
+    restart_policy: unless-stopped
+    env:
+      TZ: "{{ timezone }}"
+      PUID: "{{ puid }}"
+      PGID: "{{ pgid }}"
+    volumes:
+      - "{{ apps_dir }}/jellyfin/config:/config"
+      - "{{ media_dir }}/media:/data/media"
+    networks:
+      - name: web
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.jellyfin.entrypoints: "http"
+      traefik.http.routers.jellyfin.rule: "Host(`jellyfin.{{ domain }}`)"
+      traefik.http.middlewares.jellyfin-https-redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.jellyfin.middlewares: "jellyfin-https-redirect"
+      traefik.http.routers.jellyfin-secure.entrypoints: "https"
+      traefik.http.routers.jellyfin-secure.rule: "Host(`jellyfin.{{ domain }}`)"
+      traefik.http.routers.jellyfin-secure.tls: "true"
+      traefik.http.routers.jellyfin-secure.tls.certresolver: "cloudflare"
+      traefik.http.routers.jellyfin-secure.service: "jellyfin"
+      traefik.http.services.jellyfin.loadbalancer.server.port: "8096"
+      traefik.docker.network: "web"

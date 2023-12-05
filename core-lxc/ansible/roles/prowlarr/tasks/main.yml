@@ -1,0 +1,35 @@
+---
+- name: Create ProwlArr directories
+  ansible.builtin.file:
+    path: "{{ apps_dir }}/prowlarr"
+    state: directory
+    mode: 0755
+
+- name: Create ProwlArr App
+  community.docker.docker_container:
+    name: prowlarr
+    image: lscr.io/linuxserver/prowlarr
+    restart_policy: unless-stopped
+    pull: true
+    state: started
+    volumes:
+      - "{{ apps_dir }}/prowlarr/config:/config"
+    env:
+      TZ: "{{ timezone }}"
+      PUID: "{{ puid }}"
+      PGID: "{{ pgid }}"
+    networks:
+      - name: web
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.prowlarr.entrypoints: "http"
+      traefik.http.routers.prowlarr.rule: "Host(`prowlarr.{{ domain }}`)"
+      traefik.http.middlewares.prowlarr-https-redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.prowlarr.middlewares: "prowlarr-https-redirect"
+      traefik.http.routers.prowlarr-secure.entrypoints: "https"
+      traefik.http.routers.prowlarr-secure.rule: "Host(`prowlarr.{{ domain }}`)"
+      traefik.http.routers.prowlarr-secure.tls: "true"
+      traefik.http.routers.prowlarr-secure.tls.certresolver: "cloudflare"
+      traefik.http.routers.prowlarr-secure.service: "prowlarr"
+      traefik.http.services.prowlarr.loadbalancer.server.port: "9696"
+      traefik.docker.network: "web"
