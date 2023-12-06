@@ -1,0 +1,38 @@
+---
+# Radarr instance configuration in Buildarr.
+radarr:
+    # Configuration common to all instances.
+    port: 443
+    protocol: "https"
+    settings:
+        media_management:
+            rename_movies: true
+            replace_illegal_characters: true
+            colon_replacement: space-dash-space
+            standard_movie_format: "{Movie CleanTitle} ({Release Year}) {[Quality Full]} {[Mediainfo VideoCodec]} [{Mediainfo AudioCodec}{ Mediainfo AudioChannels}]"
+            movie_folder_format: '{Movie CleanTitle} ({Release Year})'
+            create_missing_movie_folders: false
+            delete_empty_folders: false
+            skip_free_space_check: false
+            minimum_free_space: 10000  # MB
+            use_hardlinks: true
+            import_using_script: false
+            import_script_path: null
+            import_extra_files: false
+            unmonitor_deleted_movies: false
+            propers_and_repacks: do-not-prefer
+            analyze_video_files: true
+            rescan_folder_after_refresh: always
+            change_file_date: none
+            recycling_bin: null
+            recycling_bin_cleanup: 28  # days
+            root_folders:
+                - "/data/media/movies"
+    instances:
+        radarr-hd:
+            hostname: "radarr.{{ domain }}"
+            api_key: "{{ arr_apikeys['radarr-hd'] }}"
+
+        radarr-4k:
+            hostname: "4k.radarr.{{ domain }}"
+            api_key: "{{ arr_apikeys['radarr-4k'] }}"
