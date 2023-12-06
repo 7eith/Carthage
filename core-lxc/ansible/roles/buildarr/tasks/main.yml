@@ -1,0 +1,55 @@
+- name: Fetch API keys for all Buildarr-managed instances
+  ansible.builtin.command:
+    argv:
+      - "sed"
+      - "-nE"
+      - 's,.*<ApiKey>([A-Za-z0-9]+)</ApiKey>.*,\1,p'
+      - "{{ apps_dir }}/{{ item }}/config/config.xml"
+  register: "arr_apikeys_raw"
+  loop:
+    - sonarr-hd
+    - sonarr-4k
+    - sonarr-anime
+    - radarr-hd
+    - radarr-4k
+    - prowlarr
+
+- name: Parse Buildarr-managed instance API keys
+  ansible.builtin.set_fact:
+    arr_apikeys: "{{ arr_apikeys | default({}) | combine({item.item: item.stdout}) }}"
+  no_log: true
+  loop: "{{ arr_apikeys_raw.results }}"
+
+- name: Create BuildArr directory
+  ansible.builtin.file:
+    state: directory
+    path: "{{ apps_dir }}/buildarr"
+    owner: "1000"
+    group: "1000"
+    mode: 0770
+
+- name: Create Buildarr configuration files
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "{{ apps_dir }}/buildarr/{{ item }}"
+    owner: root
+    group: "{{ pgid }}"
+    mode: 0640
+  loop:
+    - buildarr.yml
+    - sonarr.yml
+    # - prowlarr.yml
+
+- name: Launch BuildArr Docker App 
+  community.docker.docker_container:
+    name: buildarr
+    image: callum027/buildarr:0.7.1
+    pull: true
+    state: started
+    restart_policy: unless-stopped
+    env:
+      TZ: "{{ timezone }}"
+      PUID: "{{ puid }}"
+      PGID: "{{ pgid }}"
+    volumes:
+      - "{{ apps_dir }}/buildarr:/config"

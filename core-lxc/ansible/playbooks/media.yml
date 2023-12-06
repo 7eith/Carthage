@@ -8,3 +8,4 @@
     - { role: sonarr, tags: all }
     - { role: prowlarr, tags: all }
     - { role: jellyfin, tags: all }
+    - { role: buildarr, tags: all }
