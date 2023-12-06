@@ -1,0 +1,214 @@
+---
+# Prowlarr instance configuration in Buildarr.
+
+prowlarr:
+
+  # Configuration common to all instances.
+  protocol: "https"
+  port: 443
+  settings:
+    general:
+      host:
+        bind_address: "*"
+        port: 9696
+        url_base: null
+        use_ssl: false
+        instance_name: "ProwlArr"
+      proxy:
+        enable: false
+      logging:
+        log_level: "INFO"
+      analytics:
+        send_anonymous_usage_data: false
+      updates:
+        branch: "master"
+        automatic: false
+        mechanism: "docker"
+      backup:
+        folder: "Backups"
+        interval: 7
+        retention: 28
+      security:
+        authentification: "basic"
+        authentication_required: "enabled" 
+        # TODO: 
+        username: "seith" # in case
+        password: "29YUFk7gXhbTi0iB2yO+92txOS2SxoctBiIBGtZNDYg="
+    ui:
+      first_day_of_week: "monday"
+      week_column_header: "day-first"
+      short_date_format: "word-month-second"
+      long_date_format: "day-first"
+      time_format: "twentyfour-hour"
+      show_relative_dates: true
+      enable_color_impaired_mode: false
+      theme: "dark"
+      ui_language: "en"
+
+  # Instance-specific configuration.
+  instances:
+
+    # Main Prowlarr instance.
+    prowlarr:
+      hostname: "prowlarr.{{ domain }}"
+      api_key: "{{ arr_apikeys['prowlarr'] }}"
+      settings:
+        indexers:
+          indexers:
+            definitions:
+              "1337x":
+                type: "1337x"
+                enable: true
+                sync_profile: "Standard"
+                redirect: false
+                priority: 25
+                grab_limit: null
+                query_limit: null
+                tags:
+                  - "movies"
+                  - "shows"
+                fields:
+                  torrentBaseSettings.seedRatio: 3
+              "Nyaa.si":
+                type: "nyaasi"
+                enable: true
+                sync_profile: "Standard"
+                redirect: false
+                priority: 25
+                grab_limit: null
+                query_limit: null
+                tags:
+                  - "anime-shows"
+                fields:
+                  torrentBaseSettings.seedRatio: 3
+                  prefer_magnet_links: true
+              "TorrentGalaxy":
+                type: "torrentgalaxy"
+                enable: true
+                sync_profile: "Standard"
+                redirect: false
+                priority: 25
+                grab_limit: null
+                query_limit: null
+                tags:
+                  - "movies"
+                  - "shows"
+                fields:
+                  torrentBaseSettings.seedRatio: 3
+          # TODO: FlareSolverr
+          # proxies:
+          #   definitions:
+          #     "FlareSolverr":
+          #       type: "flaresolverr"
+          #       host_url: "http://flaresolverr:8191"
+          #       request_timeout: 60
+          #       tags:
+          #         - "shows"
+        apps:
+          applications:
+            definitions:
+              "Sonarr (SD/HD Shows)":
+                type: "sonarr"
+                instance_name: "sonarr-hd"
+                api_key: "{{ arr_apikeys['sonarr-hd'] }}"
+                prowlarr_url: "https://prowlarr.{{ domain }}"
+                base_url: "https://hd.sonarr.{{ domain}}"
+                sync_level: "full-sync"
+                sync_categories:
+                  - "TV/WEB-DL"
+                  - "TV/Foreign"
+                  - "TV/SD"
+                  - "TV/HD"
+                  - "TV/Other"
+                anime_sync_categories: []
+                tags:
+                  - "shows"
+              "Sonarr (4K Shows)":
+                type: "sonarr"
+                instance_name: "sonarr-4k"
+                api_key: "{{ arr_apikeys['sonarr-4k'] }}"
+                prowlarr_url: "https://prowlarr.{{ domain }}"
+                base_url: "https://4k.sonarr.{{ domain}}"
+                sync_level: "full-sync"
+                sync_categories:
+                  - "TV/WEB-DL"
+                  - "TV/Foreign"
+                  - "TV/UHD"
+                  - "TV/Other"
+                anime_sync_categories: []
+                tags:
+                  - "shows"
+              "Sonarr (Anime Shows)":
+                type: "sonarr"
+                instance_name: "sonarr-anime"
+                api_key: "{{ arr_apikeys['sonarr-anime'] }}"
+                prowlarr_url: "https://prowlarr.{{ domain }}"
+                base_url: "https://anime.sonarr.{{ domain}}"
+                sync_level: "full-sync"
+                sync_categories:
+                  - "TV/Anime"
+                anime_sync_categories:
+                  - "TV/Anime"
+                tags:
+                  - "anime-shows"
+              # Radarr definitions
+              # "Radarr (SD/HD Movies)":
+              #   type: "radarr"
+              #   instance_name: "radarr-hd"
+              #   api_key: "{{ arr_apikeys['radarr-hd'] }}"
+              #   prowlarr_url: "https://prowlarr.{{ domain }}"
+              #   base_url: "https://radarr.{{ domain}}"
+              #   sync_level: "full-sync"
+              #   sync_categories:
+              #     - "Movies/WEB-DL"
+              #     - "Movies/Foreign"
+              #     - "Movies/SD"
+              #     - "Movies/HD"
+              #     - "Movies/Other"
+              #   anime_sync_categories: []
+              #   tags:
+              #     - "movies"
+              # "Radarr (4k Movies)":
+              #   type: "radarr"
+              #   instance_name: "radarr-4k"
+              #   api_key: "{{ arr_apikeys['radarr-4k'] }}"
+              #   prowlarr_url: "https://prowlarr.{{ domain }}"
+              #   base_url: "https://4k.radarr.{{ domain}}"
+              #   sync_level: "full-sync"
+              #   sync_categories:
+              #     - "Movies/WEB-DL"
+              #     - "Movies/Foreign"
+              #     - "Movies/UHD"
+              #     - "Movies/Other"
+              #   anime_sync_categories: []
+              #   tags:
+              #     - "movies"
+          sync_profiles:
+            definitions:
+              "Standard":
+                enable_rss: true
+                enable_interactive_search: true
+                enable_automatic_search: true
+                minimum_seeders: 5
+        download_clients:
+          definitions:
+            qBitTorrent:
+              type: "qbittorrent"
+              priority: 1
+              enable: true
+              host: "qbit.{{ domain }}"
+              port: 443
+              use_ssl: true
+              username: "{{ qbit_username }}"
+              password: "{{ qbit_password }}"
+              category: "prowlarr"
+              directory: "/data/torrents/prowlarr"
+              client_priority: "last"
+        tags:
+          definitions:
+            - "shows"
+            - "anime-shows"
+            - "movies"
+        general:
+          host:
+            instance_name: "ProwlArr"

@@ -16,14 +16,9 @@
     mode: 0770
   loop:
     - torrents
-    - torrents/shows/hd
-    - torrents/shows/4k
-    - torrents/shows/anime
     - torrents/movies/hd
     - torrents/movies/4k
     - media
-    - media/shows
-    - media/anime
     - media/movies
 
 - name: Install Radarr HD
