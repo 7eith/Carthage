@@ -37,13 +37,14 @@
     mode: 0640
   loop:
     - buildarr.yml
+    - prowlarr.yml
+    - radarr.yml
     - sonarr.yml
-    # - prowlarr.yml
 
 - name: Launch BuildArr Docker App 
   community.docker.docker_container:
     name: buildarr
-    image: callum027/buildarr:0.7.1
+    image: callum027/buildarr:0.7.2
     pull: true
     state: started
     restart_policy: unless-stopped
