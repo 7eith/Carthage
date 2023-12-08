@@ -30,6 +30,8 @@ radarr:
                 delete_unmanaged: true
                 definitions:
                     - "/data/media/movies"
+        quality:
+            trash_id: "aed34b9f60ee115dfa7918b742336277"  # movies
     instances:
         radarr-hd:
             hostname: "radarr.{{ domain }}"
@@ -48,7 +50,6 @@ radarr:
                         qBitTorrent:
                             enable: true
                             type: "qbittorrent"
-                            # host: "qbit.{{ domain }}"
                             hostname: "qbit.{{ domain }}"
                             port: 443
                             use_ssl: true
@@ -80,11 +81,16 @@ radarr:
                         qBitTorrent:
                             enable: true
                             type: "qbittorrent"
-                            host: "qbit.{{ domain }}"
                             hostname: "qbit.{{ domain }}"
                             port: 443
                             use_ssl: true
                             username: "{{ qbit_username }}"
                             password: "{{ qbit_password }}"
-                            priority: 7
+                            priority: 1
+                            remove_completed_downloads: true
+                            remove_failed_downloads: true
                             category: "radarr-4k"
+                            client_priority: last
+                            initial_state: start
+                            sequential_order: false
+                            first_and_last_first: false
