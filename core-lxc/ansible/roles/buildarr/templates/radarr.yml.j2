@@ -9,7 +9,7 @@ radarr:
             rename_movies: true
             replace_illegal_characters: true
             colon_replacement: space-dash-space
-            standard_movie_format: "{Movie CleanTitle} ({Release Year}) {[Quality Full]} {[Mediainfo VideoCodec]} [{Mediainfo AudioCodec}{ Mediainfo AudioChannels}]"
+            standard_movie_format: "{Movie CleanTitle} {(Release Year)} [imdbid-{ImdbId}] - {Edition Tags }{[Custom Formats]}{[Quality Full]}{[MediaInfo 3D]}{[MediaInfo VideoDynamicRangeType]}{[Mediainfo AudioCodec}{ Mediainfo AudioChannels]}[{Mediainfo VideoCodec}]"
             movie_folder_format: '{Movie CleanTitle} ({Release Year})'
             create_missing_movie_folders: false
             delete_empty_folders: false
@@ -27,12 +27,64 @@ radarr:
             recycling_bin: null
             recycling_bin_cleanup: 28  # days
             root_folders:
-                - "/data/media/movies"
+                delete_unmanaged: true
+                definitions:
+                    - "/data/media/movies"
     instances:
         radarr-hd:
             hostname: "radarr.{{ domain }}"
             api_key: "{{ arr_apikeys['radarr-hd'] }}"
-
+            settings:
+                general:
+                        host:
+                            instance_name: "Radarr (4K Shows)"
+                custom_formats:
+                    delete_unmanaged: true
+                    definitions:
+                        french-audio:
+                            trash_id: "6d27683346c78d6a3f772e30877910a7"
+                download_clients:
+                    definitions:
+                        qBitTorrent:
+                            enable: true
+                            type: "qbittorrent"
+                            # host: "qbit.{{ domain }}"
+                            hostname: "qbit.{{ domain }}"
+                            port: 443
+                            use_ssl: true
+                            username: "{{ qbit_username }}"
+                            password: "{{ qbit_password }}"
+                            priority: 1
+                            remove_completed_downloads: true
+                            remove_failed_downloads: true
+                            category: "radarr-hd"
+                            client_priority: last
+                            initial_state: start
+                            sequential_order: false
+                            first_and_last_first: false
         radarr-4k:
             hostname: "4k.radarr.{{ domain }}"
             api_key: "{{ arr_apikeys['radarr-4k'] }}"
+            settings:
+                general:
+                    host:
+                        instance_name: "Radarr (4K Shows)"
+                custom_formats:
+                    definitions:
+                        4k-remaster:
+                            trash_id: "eca37840c13c6ef2dd0262b141a5482f"
+                        french-audio:
+                            trash_id: "6d27683346c78d6a3f772e30877910a7"
+                download_clients:
+                    definitions:
+                        qBitTorrent:
+                            enable: true
+                            type: "qbittorrent"
+                            host: "qbit.{{ domain }}"
+                            hostname: "qbit.{{ domain }}"
+                            port: 443
+                            use_ssl: true
+                            username: "{{ qbit_username }}"
+                            password: "{{ qbit_password }}"
+                            priority: 7
+                            category: "radarr-4k"

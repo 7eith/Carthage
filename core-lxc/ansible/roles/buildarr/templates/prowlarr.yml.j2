@@ -152,37 +152,37 @@ prowlarr:
                 tags:
                   - "anime-shows"
               # Radarr definitions
-              # "Radarr (SD/HD Movies)":
-              #   type: "radarr"
-              #   instance_name: "radarr-hd"
-              #   api_key: "{{ arr_apikeys['radarr-hd'] }}"
-              #   prowlarr_url: "https://prowlarr.{{ domain }}"
-              #   base_url: "https://radarr.{{ domain}}"
-              #   sync_level: "full-sync"
-              #   sync_categories:
-              #     - "Movies/WEB-DL"
-              #     - "Movies/Foreign"
-              #     - "Movies/SD"
-              #     - "Movies/HD"
-              #     - "Movies/Other"
-              #   anime_sync_categories: []
-              #   tags:
-              #     - "movies"
-              # "Radarr (4k Movies)":
-              #   type: "radarr"
-              #   instance_name: "radarr-4k"
-              #   api_key: "{{ arr_apikeys['radarr-4k'] }}"
-              #   prowlarr_url: "https://prowlarr.{{ domain }}"
-              #   base_url: "https://4k.radarr.{{ domain}}"
-              #   sync_level: "full-sync"
-              #   sync_categories:
-              #     - "Movies/WEB-DL"
-              #     - "Movies/Foreign"
-              #     - "Movies/UHD"
-              #     - "Movies/Other"
-              #   anime_sync_categories: []
-              #   tags:
-              #     - "movies"
+              "Radarr (SD/HD Movies)":
+                type: "radarr"
+                instance_name: "radarr-hd"
+                api_key: "{{ arr_apikeys['radarr-hd'] }}"
+                prowlarr_url: "https://prowlarr.{{ domain }}"
+                base_url: "https://radarr.{{ domain}}"
+                sync_level: "full-sync"
+                sync_categories:
+                  - "Movies/WEB-DL"
+                  - "Movies/Foreign"
+                  - "Movies/SD"
+                  - "Movies/HD"
+                  - "Movies/Other"
+                anime_sync_categories: []
+                tags:
+                  - "movies"
+              "Radarr (4k Movies)":
+                type: "radarr"
+                instance_name: "radarr-4k"
+                api_key: "{{ arr_apikeys['radarr-4k'] }}"
+                prowlarr_url: "https://prowlarr.{{ domain }}"
+                base_url: "https://4k.radarr.{{ domain}}"
+                sync_level: "full-sync"
+                sync_categories:
+                  - "Movies/WEB-DL"
+                  - "Movies/Foreign"
+                  - "Movies/UHD"
+                  - "Movies/Other"
+                anime_sync_categories: []
+                tags:
+                  - "movies"
           sync_profiles:
             definitions:
               "Standard":
