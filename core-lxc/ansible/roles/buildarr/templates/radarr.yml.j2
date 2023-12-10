@@ -64,7 +64,7 @@ radarr:
           trash_id: "c20c8647f2746a1f4c4262b0fbbeeeae"
         bluray-tier-iii:
           trash_id: "5608c71bcebba0a5e666223bae8c9227"
-        ## HD - Web
+        ## Web (HD)
         web-tier-i:
           trash_id: "c20f169ef63c5f40c2def54abaf4438e"
         web-tier-ii:
@@ -100,14 +100,32 @@ radarr:
           trash_id: "ae43b294509409a6a13919dedd4764c4"
         vostfr:
           trash_id: "9172b2f683f6223e3a1846427b417a3d"
-        multi:
-          trash_id: "4b900e171accbfb172729b63323ea8ca"
-        french-audio:
-          trash_id: "6d27683346c78d6a3f772e30877910a7"
         51-surround:
           trash_id: "77ff61788dfe1097194fd8743d7b4524"
         71-surround:
           trash_id: "e77382bcfeba57cb83744c9c5449b401"
+        # French Formats
+        multi-audio:
+          trash_id: "4b900e171accbfb172729b63323ea8ca"
+        french-audio:
+          trash_id: "6d27683346c78d6a3f772e30877910a7"
+        multi-french:
+          trash_id: "6d27683346c78d6a3f772e30877910a7"
+        ## Releases Groups
+        fr-bluray-tier-i:
+          trash_id: "5322da05b19d857acc1e75be3edf47b3"
+        fr-bluray-tier-ii:
+          trash_id: "57f34251344be2e283fc30e00e458be6"
+        fr-web-tier-i:
+          trash_id: "9790a618cec1aeac8ce75601a17ea40d"
+        fr-web-tier-ii:
+          trash_id: "3c83a765f84239716bd5fd2d7af188f9"
+        fr-remux-tier-i:
+          trash_id: "5583260016e0b9f683f53af41fb42e4a"
+        fr-remux-tier-ii:
+          trash_id: "9019d81307e68cd4a7eb06a567e833b8"
+        fr-scene-groups:
+          trash_id: "0d94489c0d5828cd3bf9409d309fb32b"  # !Beware: loss quality with this flag
   instances:
     radarr-hd:
       hostname: "radarr.{{ domain }}"
@@ -188,9 +206,11 @@ radarr:
                   - name: repack
                   - name: repack-v2
                   # Releases Groups
+                  ## Web
                   - name: web-tier-i
                   - name: web-tier-ii
                   - name: web-tier-iii
+                  ## Remux
                   - name: remux-tier-i
                   - name: remux-tier-ii
                   - name: remux-tier-iii
@@ -201,6 +221,92 @@ radarr:
                   - name: x265
                   - name: 3d
                   - name: extras
+              "Bluray/WEB - FR":
+                upgrades_allowed: true
+                upgrade_until_quality: "Bluray-1080p"
+                qualities:
+                    - "Bluray-1080p"
+                    - name: "WEB 1080p"
+                      members:
+                        - "WEBRip-1080p"
+                        - "WEBDL-1080p"
+                    - "Bluray-720p"
+                minimum_custom_format_score: 0
+                upgrade_until_custom_format_score: 10000
+                custom_formats:
+                  - name: hybrid
+                  - name: remaster
+                  - name: 4k-remaster
+                  - name: criterion
+                  - name: moc
+                  - name: vinegar
+                  - name: special-edition
+                  - name: imax
+                  - name: imax-enhanced
+                  # Repack
+                  - name: repack
+                  - name: repack-v2
+                  # Releases Groups
+                  ## Bluray
+                  - name: fr-bluray-tier-i
+                  - name: fr-bluray-tier-ii
+                  ## Web
+                  - name: fr-web-tier-i
+                  - name: fr-web-tier-ii
+                  # Unwanted
+                  - name: br-disk
+                  - name: lq
+                  - name: lq-french
+                  - name: x265
+                  - name: 3d
+                  # Audios
+                  - name: multi-audio
+                  - name: french-audio
+                  - name: multi-french
+                language: any
+              "Remux/WEB - FR":
+                upgrades_allowed: true
+                upgrade_until_quality: "Remux-1080p"
+                qualities:
+                    - "Remux-1080p"
+                    - "Bluray-1080p"
+                    - name: "WEB 1080p"
+                      members:
+                        - "WEBRip-1080p"
+                        - "WEBDL-1080p"
+                minimum_custom_format_score: 0
+                upgrade_until_custom_format_score: 10000
+                custom_formats:
+                  - name: hybrid
+                  - name: remaster
+                  - name: 4k-remaster
+                  - name: criterion
+                  - name: moc
+                  - name: vinegar
+                  - name: special-edition
+                  - name: imax
+                  - name: imax-enhanced
+                  # Repack
+                  - name: repack
+                  - name: repack-v2
+                  # Releases Groups
+                  ## Remux
+                  - name: fr-remux-tier-i
+                  - name: fr-remux-tier-ii
+                  ## Web
+                  - name: fr-web-tier-i
+                  - name: fr-web-tier-ii
+                  # Unwanted
+                  - name: br-disk
+                  - name: lq
+                  - name: lq-french
+                  - name: x265
+                  - name: 3d
+                  # Audios
+                  - name: multi-audio
+                  - name: french-audio
+                  - name: multi-french
+                language: any
         download_clients:
           definitions:
             qBitTorrent:
