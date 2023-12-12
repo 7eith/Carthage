@@ -57,13 +57,20 @@ radarr:
         imax-enhanced:
           trash_id: "9f6cbff8cfe4ebbc1bde14c7b7bec0de"
         # Release Groups
-        ## Bluray
+        ## Bluray (HD)
         bluray-tier-i:
           trash_id: "ed27ebfef2f323e964fb1f61391bcb35"
         bluray-tier-ii:
           trash_id: "c20c8647f2746a1f4c4262b0fbbeeeae"
         bluray-tier-iii:
           trash_id: "5608c71bcebba0a5e666223bae8c9227"
+        ## Bluray (UHD)
+        uhd-bluray-tier-i:
+          trash_id: "4d74ac4c4db0b64bff6ce0cffef99bf0"
+        uhd-bluray-tier-ii:
+          trash_id: "a58f517a70193f8e578056642178419d"
+        uhd-bluray-tier-iii:
+          trash_id: "e71939fae578037e7aed3ee219bbe7c1"
         ## Web (HD)
         web-tier-i:
           trash_id: "c20f169ef63c5f40c2def54abaf4438e"
@@ -93,6 +100,8 @@ radarr:
           trash_id: "0a3f082873eb454bde444150b70253cc"
         lq-french:
           trash_id: "48f031e76111f17ea94898f4cdc34fdc"
+        upscaled:
+          trash_id: "bfd8eb01832d646a0a89c4deb46f8564"
         # Extras Formats
         repack:
           trash_id: "e7718d7a3ce595f289bfee26adc178f5"
@@ -334,10 +343,92 @@ radarr:
             instance_name: "Radarr (4K Movies)"
         quality:
           trash_id: "da8c8c0268b2f304be588132831543d2"
-        custom_formats:
-          definitions:
-            4k-remaster:
-              trash_id: "eca37840c13c6ef2dd0262b141a5482f"
+        profiles:
+          quality_profiiles:
+            delete_unmanaged: true
+            definitions:
+              "UHD Bluray/WEB":
+                upgrades_allowed: true
+                upgrade_until_quality: "Bluray-2160p"
+                qualities:
+                    - "Bluray-2160p"
+                    - name: "WEB 2160p"
+                      members:
+                        - "WEBRip-2160p"
+                        - "WEBDL-2160p"
+                minimum_custom_format_score: 0
+                upgrade_until_custom_format_score: 10000
+                custom_formats:
+                  - name: hybrid
+                  - name: remaster
+                  - name: 4k-remaster
+                  - name: criterion
+                  - name: moc
+                  - name: vinegar
+                  - name: special-edition
+                  - name: imax
+                  - name: imax-enhanced
+                  # Repack
+                  - name: repack
+                  - name: repack-v2
+                  # Releases Groups
+                  ## Bluray (UHD)
+                  - name: uhd-bluray-tier-i
+                  - name: uhd-bluray-tier-ii
+                  - name: uhd-bluray-tier-iii
+                  ## Web
+                  - name: web-tier-i
+                  - name: web-tier-ii
+                  - name: web-tier-iii
+                  # Unwanted
+                  - name: br-disk
+                  - name: lq
+                  - name: lq-release-title
+                  - name: x265
+                  - name: 3d
+                  - name: extras
+                  - name: upscaled
+              "UHD Remux/WEB":
+                upgrades_allowed: true
+                upgrade_until_quality: "Remux-2160p"
+                qualities:
+                    - "Remux-2160p"
+                    - name: "WEB 2160p"
+                      members:
+                        - "WEBRip-2160p"
+                        - "WEBDL-2160p"
+                minimum_custom_format_score: 0
+                upgrade_until_custom_format_score: 10000
+                custom_formats:
+                  - name: hybrid
+                  - name: remaster
+                  - name: 4k-remaster
+                  - name: criterion
+                  - name: moc
+                  - name: vinegar
+                  - name: special-edition
+                  - name: imax
+                  - name: imax-enhanced
+                  # Repack
+                  - name: repack
+                  - name: repack-v2
+                  # Releases Groups
+                  ## Web
+                  - name: web-tier-i
+                  - name: web-tier-ii
+                  - name: web-tier-iii
+                  ## Remux
+                  - name: remux-tier-i
+                  - name: remux-tier-ii
+                  - name: remux-tier-iii
+                  # Unwanted
+                  - name: br-disk
+                  - name: lq
+                  - name: lq-release-title
+                  - name: x265
+                  - name: 3d
+                  - name: extras
+                  - name: upscaled
         download_clients:
           definitions:
             qBitTorrent:
