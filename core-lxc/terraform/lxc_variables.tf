@@ -18,3 +18,19 @@ variable "traefik_ip" {
   type    = string
   default = "192.168.1.70/24"
 }
+
+# Minecraft Server
+variable "mcserver_lxcid" {
+  type    = number
+  default = 790
+}
+
+variable "mcserver_mac" {
+  type    = string
+  default = "C6:1A:E1:C6:86:01"
+}
+
+variable "mcserver_ip" {
+  type    = string
+  default = "192.168.1.90/24"
+}
