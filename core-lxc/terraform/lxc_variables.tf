@@ -34,3 +34,19 @@ variable "mcserver_ip" {
   type    = string
   default = "192.168.1.90/24"
 }
+
+# Astra (Dev Environment Core)
+variable "astra_lxcid" {
+  type    = number
+  default = 701
+}
+
+variable "astra_mac" {
+  type    = string
+  default = "D6:1A:E1:C6:86:01"
+}
+
+variable "astra_ip" {
+  type    = string
+  default = "192.168.1.64/24"
+}
